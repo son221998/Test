@@ -19,9 +19,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::table('articals', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained('categories');
-        });
+     
     }
 
     /**
