@@ -85,7 +85,7 @@ Route::get('/category', [CategoryController::class, 'index']);
 Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::group(['middleware' => ['postpermission']], function(){ 
         Route::post('/category/create', [CategoryController::class, 'create']);
-        Route::put('/category/edit/{id}', [CategoryController::class, 'update']);
+        Route::PATCH('/category/edit/{id}', [CategoryController::class, 'update']);
         Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
         });
 });
