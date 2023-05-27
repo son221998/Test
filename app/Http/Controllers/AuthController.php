@@ -6,10 +6,12 @@ use App\Models\role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Middleware\AdminPermision;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\UploadController;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 
 
@@ -44,28 +46,69 @@ class AuthController extends Controller
        
     }
 
+    // public function login(Request $request){
+    // 	$validator = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //         'password' => 'required|string|min:6',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return response()->json($validator->errors(), 422);
+    //     }
+    //     if (! $token = auth()->attempt($validator->validated())) {
+    //         return response()->json(['error' => 'Unauthorized'], 401);
+    //     }
+    //     // create token
+    //     return $this->createNewToken($token);
+    // }
+    // protected function createNewToken($token){
+    //     return response()->json([
+          
+    //         'token_type' => 'bearer',
+    //         //no expired token
+    //         'expires_in' => auth()->factory()->getTTL() * 60,
+    //         'user' => auth()->user(),
+    //         'access_token' => $token,
+    //     ]);
+    // }
     public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
+        	// validation 
+        $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string',
         ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        $model = User::query()->where('email', $request->email)->first();
+        if(empty($model)){
+            return request()->json([
+                'status' => 500,
+                'message' => 'Error',
+            ]);
         }
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!Hash::check($request->password, $model->password)){
+            return request()->json([
+                'status' => 500,
+                'message' => 'Password or Email incorrect',
+            ]);
         }
-        return $this->createNewToken($token);
-    }
-    protected function createNewToken($token){
+        $token =$model->createToken(config('app.name'))->plainTextToken;
+            return response()->json([
+                'status' => 200,
+                'message' => 'Sucess',
+                'user' => $model,
+                'token' => $token,
+            ]);
+     }
+    
+     public function refresh(Request $request){
+        $request->user()->tokens()->delete();
+        $token =$request->user()->createToken(config('app.name'))->plainTextToken;
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            //no expired token
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'status' => 200,
+            'message' => 'Success',
+            'user' => $request->user(),
+            'token' => $token,
         ]);
-    }
+     }
+    
 
     //add id from role to user
     
