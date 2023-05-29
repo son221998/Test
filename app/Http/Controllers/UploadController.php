@@ -56,7 +56,8 @@ class UploadController extends Controller
             $timeout = 3600;
 
             $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
-            $signedUrl = $ossClient->signUrl($bucket, $storage->path, $timeout);
+            $signedUrl = $ossClient->signUrl($bucket,$storage->path,3600,"GET",null);
+            // $ossClient->signUrl($bucket, $storage->path, $timeout);
 
             return $signedUrl;
         } catch (OssException $e) {
