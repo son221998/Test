@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('thumnail');
-            $table->string('content');
+            $table->text('content');
             $table->string('author');
             $table->string('category_id');
             $table->string('tag_id');

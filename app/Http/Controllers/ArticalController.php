@@ -62,9 +62,24 @@ class ArticalController extends Controller
     {
         try{
             $cloudController = new UploadController();
-           
+            
             $articals = Artical::all();
+            // foreach($articals as $artical){
+               
+            //     $artical['tag_id'] = $artical->tags->name;
+            //     if(!empty($artical['thumnail'])){
+            //         $artical['thumnail'] = $cloudController->getSignedUrl($artical['thumnail']);
+            //     }
+            // }
+            
             foreach($articals as $artical){
+                $tags = Tags::find($artical->tag_id);
+                $artical['category_id'] = $artical->category->title;
+                $artical['tag_id'] = $tags->title;
+                if($artical['like'] == null){
+                    $artical['like'] = 0;
+                }
+               //show tag 
                 if(!empty($artical['thumnail'])){
                     $artical['thumnail'] = $cloudController->getSignedUrl($artical['thumnail']);
                 }

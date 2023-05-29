@@ -16,7 +16,7 @@ class Tags extends Model
     ];
     public function artical()
     {
-        return $this->belongsToMany(Artical::class);
+        return $this->hasMany(Artical::class);
     }
 
 }

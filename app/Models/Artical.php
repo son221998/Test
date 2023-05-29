@@ -40,7 +40,7 @@ class Artical extends Model
     }
     public function tag()
     {
-        return $this->belongsToMany(Tags::class);
+        return $this->hasMany(Tags::class);
     }
 
     

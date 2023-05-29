@@ -13,6 +13,7 @@ class TagsController extends Controller
     public function index()
     {
         try{
+           
             $tags = Tags::all();
             return response()->json([
                 'message' => 'tags retrieved successfully',
