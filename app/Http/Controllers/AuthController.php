@@ -96,11 +96,16 @@ class AuthController extends Controller
                 'user' => $model,
                 'token' => $token,
             ]);
+        
+           
+
      }
     
      public function refresh(Request $request){
         $request->user()->tokens()->delete();
         $token =$request->user()->createToken(config('app.name'))->plainTextToken;
+        //if user has new token old token is expired
+       
         return response()->json([
             'status' => 200,
             'message' => 'Success',

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('category_id');
             $table->string('tag_id');
+            $table->string('type_id');
             $table->string('origin');
             $table->integer('like')->nullable();
             $table->timestamps();

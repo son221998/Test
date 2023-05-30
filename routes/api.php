@@ -13,6 +13,7 @@ use App\Http\Controllers\ReplyCommentController;
 use App\Http\Controllers\LikeController;
 use App\Models\ReplyComment;
 use App\Http\Controllers\TagsController;
+use App\Http\Controllers\TypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +102,16 @@ Route::group(['middleware' =>['auth:sanctum']], function(){
         });
 });
 
+/* Type */
+
+Route::get('/type', [TypeController::class, 'index']);
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::group(['middleware' => ['postpermission']], function(){
+        Route::post('/type/create', [TypeController::class, 'create']);
+        Route::put('/type/edit/{id}', [TypeController::class, 'update']);
+        Route::delete('/type/delete/{id}', [TypeController::class, 'destroy']);
+        });
+});
 
 /* Comment */
 

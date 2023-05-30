@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UploadController;
+use App\Models\Type;
 
 class ArticalController extends Controller
 {
@@ -31,12 +32,20 @@ class ArticalController extends Controller
                 ], 404);
             }
 
+            $type = Type::find($request->type_id);
+            if(!$type){
+                return response()->json([
+                    'message' => 'type not found',
+                ], 404);
+            }
+
             $artical = new Artical();
             $artical->title = $request->title;
             $artical->content = $request->content;
             $artical->author = $request->author;
             $artical->category_id = $request->category_id;
             $artical->tag_id = $request->tag_id;
+            $artical->type_id = $request->type_id;
             $artical->origin = $request->origin;
             $artical->thumnail = $cloudController->UploadFile($request->file('thumnail'));
             $artical->save();
@@ -76,6 +85,7 @@ class ArticalController extends Controller
                 $tags = Tags::find($artical->tag_id);
                 $artical['category_id'] = $artical->category->title;
                 $artical['tag_id'] = $tags->title;
+                $artical['type_id'] = $artical->type->name;
                 if($artical['like'] == null){
                     $artical['like'] = 0;
                 }
@@ -113,6 +123,12 @@ class ArticalController extends Controller
             if(!$tags){
                 return response()->json([
                     'message' => 'tags not found',
+                ], 404);
+            }
+            $type = Type::find($request->type_id);
+            if(!$type){
+                return response()->json([
+                    'message' => 'type not found',
                 ], 404);
             }
             $artical = Artical::find($id);
