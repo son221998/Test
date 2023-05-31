@@ -61,11 +61,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 
     /* Editor */
+   Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::group(['middleware' => ['editor']], function(){
         Route::get('/all/user', [AuthController::class, 'index']);
         Route::post('/role/create', [RoleController::class, 'create']);
         Route::get('/role', [RoleController::class,'index']);
     });
+   });
 
 /* Artical */
     Route::get('/artical', [ArticalController::class, 'index']);
