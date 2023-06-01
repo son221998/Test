@@ -11,6 +11,7 @@ use App\Http\Middleware\AdminPermision;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\UploadController;
+use Illuminate\Support\Facades\Redis;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 
@@ -23,12 +24,10 @@ class AuthController extends Controller
 
         //create new user 
         try{
-            $cloudController = new UploadController();
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email; 
             $user->password = bcrypt($request->password);
-            $user->avatar = $cloudController->UploadFile($request->file('avatar'));
             $user->save();
             return response()->json([
                 'message' => 'User successfully registered',
@@ -46,31 +45,25 @@ class AuthController extends Controller
      
        
     }
-
-    // public function login(Request $request){
-    // 	$validator = Validator::make($request->all(), [
-    //         'email' => 'required|email',
-    //         'password' => 'required|string|min:6',
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 422);
-    //     }
-    //     if (! $token = auth()->attempt($validator->validated())) {
-    //         return response()->json(['error' => 'Unauthorized'], 401);
-    //     }
-    //     // create token
-    //     return $this->createNewToken($token);
-    // }
-    // protected function createNewToken($token){
-    //     return response()->json([
-          
-    //         'token_type' => 'bearer',
-    //         //no expired token
-    //         'expires_in' => auth()->factory()->getTTL() * 60,
-    //         'user' => auth()->user(),
-    //         'access_token' => $token,
-    //     ]);
-    // }
+    public function addAvatar(Request $request){
+        try{
+            $cloudController = new UploadController();
+            $user = User::find($request->user()->id);
+            $user->avatar = $cloudController->UploadFile($request->file('avatar'));
+            $user->save();
+            return response()->json([
+                'message' => 'User successfully add avatar',
+                'user' => $user
+                
+            ], 201);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => 'User failed add avatar',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
     public function login(Request $request){
         	// validation 
         $request->validate([
