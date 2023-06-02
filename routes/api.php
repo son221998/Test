@@ -85,9 +85,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::put('/artical/update/{id}', [ArticalController::class, 'edit']);
     Route::delete('/artical/delete/{id}', [ArticalController::class, 'delete']);
     Route::get('/category/show/{id}',[ArticalController::class, 'shortArticalByCategory']);
-    Route::post('/app/version/create', [AppversionController::class, 'create']);
+    Route::post('/app/version/create/', [AppversionController::class, 'create']);
     Route::put('/app/version/edit/{id}', [AppversionController::class, 'edit']);
     Route::Delete('/app/version/delete/{id}', [AppversionController::class, 'destroy']);
+    Route::get('/version', [AppversionController::class, 'GetfirstApp']);
 });
 });
 

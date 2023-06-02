@@ -45,6 +45,7 @@ class AppversionController extends Controller
                 'error' => $e->getMessage()
             ], 400);
         }
+       
     }
   
     /**
@@ -111,6 +112,25 @@ class AppversionController extends Controller
         catch(\Exception $e){
             return response()->json([
                 'message' => 'Appversion failed deleted',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function GetfirstApp () 
+    {
+        try{
+           //show only first 
+            $appversion = Appversion::first();
+            return response()->json([
+                'message' => 'Appversion successfully get',
+                'appversion' => $appversion
+                
+            ], 201);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => 'Appversion failed get',
                 'error' => $e->getMessage()
             ], 400);
         }
