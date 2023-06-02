@@ -14,6 +14,8 @@ use App\Http\Controllers\LikeController;
 use App\Models\ReplyComment;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\AppversionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
  
  Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/add/avatar', [AuthController::class, 'addAvatar']) ;
+    Route::get('/user/info', [AuthController::class, 'userinfo']);
     Route::group(['middleware'=> ['user']], function(){
         Route::put('/user/update', [AuthController::class, 'updateOwnUser']);
         Route::delete('/user/delete/{id}', [AuthController::class, 'deleteOwnUser']);
@@ -68,6 +71,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/all/user', [AuthController::class, 'index']);
         Route::post('/role/create', [RoleController::class, 'create']);
         Route::get('/role', [RoleController::class,'index']);
+       
     });
    });
 
@@ -81,12 +85,16 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::put('/artical/update/{id}', [ArticalController::class, 'edit']);
     Route::delete('/artical/delete/{id}', [ArticalController::class, 'delete']);
     Route::get('/category/show/{id}',[ArticalController::class, 'shortArticalByCategory']);
+    Route::post('/app/version/create', [AppversionController::class, 'create']);
+    Route::put('/app/version/edit/{id}', [AppversionController::class, 'edit']);
+    Route::Delete('/app/version/delete/{id}', [AppversionController::class, 'destroy']);
 });
 });
 
 
 /* Category */
 Route::get('/category', [CategoryController::class, 'index']);
+Route::get('/app/version', [AppversionController::class, 'index']);
 Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::group(['middleware' => ['postpermission']], function(){ 
         Route::post('/category/create', [CategoryController::class, 'create']);
@@ -121,11 +129,13 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
 Route::get('/comment',[CommentController::class, 'index']);
 Route::get('/comment/reply/{id}',[CommentController::class,'showreply']);
+
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::group(['middleware' => ['user']], function(){
         Route::post('/comment/create/', [CommentController::class, 'create']);
         Route::put('/comment/update/{id}', [CommentController::class, 'update']);
         Route::delete('/comment/delete/{id}', [CommentController::class, 'delete']);
+       
     
         /* Reply Comment */
     
@@ -137,6 +147,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 
 Route::get('/artical/test/{id}', [ArticalController::class, 'showArticalHasComment']);
+
+
 
 
     

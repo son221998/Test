@@ -208,4 +208,10 @@ public function logout() {
     auth()->logout();
     return response()->json(['message' => 'User successfully signed out']);
 }
+
+public function userinfo()
+{
+    return response()->json(auth()->user());
+
+}
 }
