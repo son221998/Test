@@ -91,30 +91,29 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category,$id)
+    public function update(Request $request,$id)
     {
-        try{
-            $cloudController = new UploadController();
-            $category = Category::find($id);
-            $category->update($request->all());
-            if($request->hasFile('thumnail')){
-                $cloudController->deleteFile($category['thumnail']);
-                $category->thumnail = $cloudController->UploadFile($request->file('thumnail'));
-            }
-            $category->save();
+       try{
+        $cloudController = new UploadController();
+        $category = Category::find($id);
+        $category->title= !$request->title ? $category->title : $request->title;
+        $category->discription = !$request->discription ? $category->discription : $request->discription;
+        $category->thumnail = !$request->thumnail ? $category->thumnail : $cloudController->UploadFile($request->file('thumnail'));
+        
 
-            return response()->json([
-                'message' => 'category updated successfully',
-                'category' => $category
-            ], 201);
-            
-        }
-        catch(\Exception $e){
-                return response()->json([
-                    'message' => 'category updated failed',
-                    'error' => $e->getMessage()
-                ], 400);
-            }
+        $category->save();
+
+        return response()->json([
+            'message' => 'category updated successfully',
+            'category' => $category
+        ], 201);
+       }
+         catch(\Exception $e){
+          return response()->json([
+                'message' => 'category updated failed',
+                'error' => $e->getMessage()
+          ], 400);
+         }
     
     }
 
@@ -141,6 +140,10 @@ class CategoryController extends Controller
                 ], 400);
             }
     }
+
+
+   
+
 
    
 }

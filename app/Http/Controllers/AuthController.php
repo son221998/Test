@@ -6,10 +6,13 @@ use App\Models\role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Middleware\AdminPermision;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\UploadController;
+use Illuminate\Support\Facades\Redis;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 
 
 
@@ -21,16 +24,15 @@ class AuthController extends Controller
 
         //create new user 
         try{
-            $cloudController = new UploadController();
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email; 
             $user->password = bcrypt($request->password);
-            $user->avatar = $cloudController->UploadFile($request->file('avatar'));
             $user->save();
             return response()->json([
                 'message' => 'User successfully registered',
                 'user' => $user
+                
             ], 201);
         }
         catch(\Exception $e){
@@ -43,29 +45,69 @@ class AuthController extends Controller
      
        
     }
-
+    public function addAvatar(Request $request){
+        try{
+            $cloudController = new UploadController();
+            $user = User::find($request->user()->id);
+            $user->avatar = $cloudController->UploadFile($request->file('avatar'));
+            $user->save();
+            return response()->json([
+                'message' => 'User successfully add avatar',
+                'user' => $user
+                
+            ], 201);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => 'User failed add avatar',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
     public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
+        	// validation 
+        $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string',
         ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        $model = User::query()->where('email', $request->email)->first();
+        if(empty($model)){
+            return request()->json([
+                'status' => 500,
+                'message' => 'Error',
+            ]);
         }
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if(!Hash::check($request->password, $model->password)){
+            return request()->json([
+                'status' => 500,
+                'message' => 'Password or Email incorrect',
+            ]);
         }
-        return $this->createNewToken($token);
-    }
-    protected function createNewToken($token){
+        $token =$model->createToken(config('app.name'))->plainTextToken;
+            return response()->json([
+                'status' => 200,
+                'message' => 'Sucess',
+                'user' => $model,
+                'token' => $token,
+            ]);
+        
+           
+
+     }
+    
+     public function refresh(Request $request){
+        $request->user()->tokens()->delete();
+        $token =$request->user()->createToken(config('app.name'))->plainTextToken;
+        //if user has new token old token is expired
+       
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            //no expired token
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'status' => 200,
+            'message' => 'Success',
+            'user' => $request->user(),
+            'token' => $token,
         ]);
-    }
+     }
+    
 
     //add id from role to user
     
@@ -165,5 +207,11 @@ class AuthController extends Controller
 public function logout() {
     auth()->logout();
     return response()->json(['message' => 'User successfully signed out']);
+}
+
+public function userinfo()
+{
+    return response()->json(auth()->user());
+
 }
 }

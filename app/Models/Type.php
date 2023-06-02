@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tags extends Model
+class Type extends Model
 {
     use HasFactory;
-    protected $table = 'tags';
-    protected $fillable = 
-    [
-        'title',
+    protected $table = 'types';
+    protected $fillable = [
+        'name',
         'description'
     ];
     public function artical()
     {
         return $this->hasMany(Artical::class);
     }
-
 }
-

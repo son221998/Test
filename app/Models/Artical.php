@@ -17,6 +17,7 @@ class Artical extends Model
         'category_id',
         'tag_id',
         'user_id',
+        'type_id',
         'origin',
     ];
 
@@ -40,7 +41,12 @@ class Artical extends Model
     }
     public function tag()
     {
-        return $this->belongsToMany(Tags::class);
+        return $this->hasMany(Tags::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
     }
 
     

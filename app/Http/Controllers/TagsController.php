@@ -13,6 +13,7 @@ class TagsController extends Controller
     public function index()
     {
         try{
+           
             $tags = Tags::all();
             return response()->json([
                 'message' => 'tags retrieved successfully',
@@ -73,12 +74,15 @@ class TagsController extends Controller
             }
         }
  
-    public function destroy(Tags $tags)
+    public function destroy(Tags $tags,$id)
     {
         try{
+            $tags = Tags::find($id);
             $tags->delete();
+
             return response()->json([
                 'message' => 'tags deleted successfully',
+                'tags' => $tags
             ], 201);
             
         }
