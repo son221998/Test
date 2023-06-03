@@ -50,6 +50,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
  Route::post('/login', [AuthController::class, 'login']);
  Route::post('/login', [AuthController::class, 'login']);
  Route::get('/auth/google', [AuthController::class, 'redirectToProvider'])->name('auth.google');
+ //refrsh token route
+ Route::get('/refresh', [AuthController::class, 'refresh']);
  
  Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/add/avatar', [AuthController::class, 'addAvatar']) ;

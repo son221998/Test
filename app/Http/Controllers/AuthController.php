@@ -116,6 +116,15 @@ class AuthController extends Controller
             'token' => $token,
         ]);
      }
+
+        public function logout(Request $request){
+            $request->user()->tokens()->delete();
+            //delete token
+            return response()->json([
+                'status' => 200,
+                'message' => 'Success',
+            ]);
+        }
     
 
     //add id from role to user
@@ -226,18 +235,18 @@ class AuthController extends Controller
         ], 400);
        }
 }
-public function logout() {
+// public function logout() {
     
-    //RequestGuard
-    $user = auth()->user();
-    $user->tokens()->delete();
-    return response()->json([
-        'message' => 'User successfully logout',
-        'user' => $user
-    ], 201);
+//     //RequestGuard
+//     $user = auth()->user();
+//     $user->tokens()->delete();
+//     return response()->json([
+//         'message' => 'User successfully logout',
+//         'user' => $user
+//     ], 201);
     
 
-}
+// }
 
 public function userinfo()
 {
