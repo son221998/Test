@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user/info', [AuthController::class, 'userinfo']);
     Route::group(['middleware'=> ['user']], function(){
         Route::put('/user/update', [AuthController::class, 'updateOwnUser']);
-        Route::delete('/user/delete/{id}', [AuthController::class, 'deleteOwnUser']);
+        Route::delete('/user/delete/', [AuthController::class, 'deleteOwnUser']);
         
        
         /* like */
