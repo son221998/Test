@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Redis;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use Laravel\Socialite\Facades\Socialite;
 
 
 
@@ -214,4 +215,9 @@ public function userinfo()
     return response()->json(auth()->user());
 
 }
+
+public function redirectToProvider()
+    {
+        return Socialite::driver('google')->redirect();
+    }
 }

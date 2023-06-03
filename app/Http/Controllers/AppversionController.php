@@ -7,27 +7,26 @@ use Illuminate\Http\Request;
 
 class AppversionController extends Controller
 {
-    public function create(Request $request)
-    {
-        try {
-            $appversion = new Appversion();
-            $appversion->version = $request->version;
-            $appversion->description = $request->description;
-            $appversion->link_ios = $request->link_ios;
-            $appversion->link_android = $request->link_android;
-            $appversion->status = $request->status;
-            $appversion->save();
-            return response()->json([
-                'message' => 'Appversion successfully created',
-                'appversion' => $appversion
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Appversion failed created',
-                'error' => $e->getMessage()
-            ], 400);
-        }
-    }
+    // public function create(Request $request)
+    // {
+    //     try {
+    //         $appversion = new Appversion();
+    //         $appversion->version = $request->version;
+    //         $appversion->description = $request->description;
+    //         $appversion->platform = $request->link_ios;
+    //         $appversion->status = $request->status;
+    //         $appversion->save();
+    //         return response()->json([
+    //             'message' => 'Appversion successfully created',
+    //             'appversion' => $appversion
+    //         ], 201);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'message' => 'Appversion failed created',
+    //             'error' => $e->getMessage()
+    //         ], 400);
+    //     }
+    // }
 
     public function index()
     {

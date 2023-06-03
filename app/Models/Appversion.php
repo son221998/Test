@@ -11,8 +11,7 @@ class Appversion extends Model
     protected $table = 'appversions';
     protected $fillable = [
         'version',
-        'link_ios',
-        'link_android',
+        'platform',
         'description',
         'status'
     ];

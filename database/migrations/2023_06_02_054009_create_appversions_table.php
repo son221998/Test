@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('appversions', function (Blueprint $table) {
             $table->id();
             $table->string('version');
-            $table->string('link_ios');
-            $table->string('link_android');
+            $table->string('platform');
             $table->string('description');
             $table->boolean('status')->default(1);
             
