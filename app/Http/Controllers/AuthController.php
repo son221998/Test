@@ -26,9 +26,11 @@ class AuthController extends Controller
 
         //create new user 
         try{
+            // $cloudController = new UploadController();
             $user = new User();
             $user->name = $request->name;
-            $user->email = $request->email; 
+            $user->email = $request->email;
+            // $user->telegram = $cloudController->UploadFile(($request->file('telegram')));
             $user->password = bcrypt($request->password);
             $user->save();
             return response()->json([
@@ -124,10 +126,15 @@ class AuthController extends Controller
         $user = User::all();
        //loop user 
         foreach($user as $user){
+            $role = role::find($user['role_id']);
+            $user['role_id'] = $role['name'];
+            // $user['telegram'] = $cloudController->getSignedUrl($user['telegram']);
            if(!empty($user['avatar'])){
                 $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
            }
         }
+        //show role_id nas name in role
+        
         return response()->json([
             'message' => 'User successfully get all',
             'user' => $user
@@ -240,6 +247,8 @@ public function userinfo()
     if(!empty($user['avatar'])){
         $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
     }
+    $role = role::find($user['role_id']);
+    $user['role_id'] = $role['name'];
     return response()->json([
         'message' => 'User successfully get info',
         'user' => $user

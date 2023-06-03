@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string ('point')->nullable()->default('1');
             $table->string('google_id')->nullable();
+            // $table->string('telegram')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
