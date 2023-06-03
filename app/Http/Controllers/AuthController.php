@@ -145,7 +145,10 @@ class AuthController extends Controller
     try{
         $cloudController = new UploadController();
         $user = User::find(auth()->user()->id);
-        $cloudController->deleteFile($user->avatar);
+        //if avatar is not emthy
+        if(!empty($user['avatar'])){
+            $cloudController->deleteFile($user['avatar']);
+        }
         $user->delete();
         return response()->json([
             'message' => 'User successfully deleted',
@@ -207,8 +210,16 @@ class AuthController extends Controller
        }
 }
 public function logout() {
-    auth()->logout();
-    return response()->json(['message' => 'User successfully signed out']);
+    
+    //RequestGuard
+    $user = auth()->user();
+    $user->tokens()->delete();
+    return response()->json([
+        'message' => 'User successfully logout',
+        'user' => $user
+    ], 201);
+    
+
 }
 
 public function userinfo()

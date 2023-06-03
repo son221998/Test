@@ -53,10 +53,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
  
  Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/add/avatar', [AuthController::class, 'addAvatar']) ;
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user/info', [AuthController::class, 'userinfo']);
     Route::group(['middleware'=> ['user']], function(){
         Route::put('/user/update', [AuthController::class, 'updateOwnUser']);
         Route::delete('/user/delete/', [AuthController::class, 'deleteOwnUser']);
+        
         
        
         /* like */
