@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 /* Artical */
     Route::get('/artical', [ArticalController::class, 'index']);
     Route::get('/artical/{id}', [ArticalController::class, 'show']);
+    Route::get('/version', [AppversionController::class, 'GetfirstApp']);
 // group auth sanctum
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::group(['middleware' => ['postpermission']], function(){
@@ -90,7 +91,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/app/version/create/', [AppversionController::class, 'create']);
     Route::put('/app/version/edit/{id}', [AppversionController::class, 'edit']);
     Route::Delete('/app/version/delete/{id}', [AppversionController::class, 'destroy']);
-    Route::get('/version', [AppversionController::class, 'GetfirstApp']);
+   
 });
 });
 

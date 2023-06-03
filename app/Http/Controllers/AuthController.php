@@ -14,6 +14,7 @@ use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Redis;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -218,6 +219,15 @@ public function userinfo()
 
 public function redirectToProvider()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->with(
+            [
+                'client_id' => '159397284963-kdg7q7pr9lift2jvtnn381kdal84eamo.apps.googleusercontent.com',
+                'client_secret' => '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',
+                'redirect_uri' => 'https://cinemagickh.com/api/auth/google/callback'
+            ]
+        )->redirect();
+        
+
+
     }
 }
