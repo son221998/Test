@@ -221,8 +221,8 @@ public function redirectToProvider()
     {
         return Socialite::driver('google')->with(
             [
-                'client_id' => '159397284963-kdg7q7pr9lift2jvtnn381kdal84eamo.apps.googleusercontent.com',
-                'client_secret' => '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',
+                'client_id' => '16333006419-ekp3fs5jvnfj5ojn7d97f52el2tv3e3u.apps.googleusercontent.com',
+                'client_secret' => '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',
                 'redirect_uri' => 'https://cinemagickh.com/api/auth/google/callback'
             ]
         )->redirect();
