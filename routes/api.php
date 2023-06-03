@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
  Route::post('/register', [AuthController::class, 'register']);
  Route::post('/login', [AuthController::class, 'login']);
  Route::post('/login', [AuthController::class, 'login']);
- Route::get('/auth/google', [LoginController::class, 'redirectToProvider'])->name('auth.google');
+ Route::get('/auth/google', [AuthController::class, 'redirectToProvider'])->name('auth.google');
  
  Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/add/avatar', [AuthController::class, 'addAvatar']) ;
