@@ -73,6 +73,11 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
         $model = User::query()->where('email', $request->email)->first();
+        //show avatar as link
+        if(!empty($model['avatar'])){
+            $cloudController = new UploadController();
+            $model['avatar'] = $cloudController->getSignedUrl($model['avatar']);
+        }
         if(empty($model)){
             return request()->json([
                 'status' => 500,
@@ -169,6 +174,11 @@ class AuthController extends Controller
     try{
         $user = User::find(auth()->user()->id);
         $user->update($request->all());
+        //show avatar as link
+        if(!empty($user['avatar'])){
+            $cloudController = new UploadController();
+            $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
+        }
         return response()->json([
             'message' => 'User successfully updated',
             'user' => $user
@@ -224,7 +234,19 @@ public function logout() {
 
 public function userinfo()
 {
-    return response()->json(auth()->user());
+    //show avatar as link
+    $cloudController = new UploadController();
+    $user = auth()->user();
+    if(!empty($user['avatar'])){
+        $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
+    }
+    return response()->json([
+        'message' => 'User successfully get info',
+        'user' => $user
+    ], 201);
+
+    // return response()->json(auth()->user());
+
 
 }
 
