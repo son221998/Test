@@ -57,11 +57,8 @@ class AuthController extends Controller
            if($user->avatar != null){
                 $cloudController->delete($user->avatar);
             }
-            // if(!empty($user['avatar_id'])){
-            //     //delete old avatar
-            //     $cloudController->delete($user['avatar']);
-            // }
-            $user->avatar = $clsoudController->UploadFile($request->file('avatar'));
+            
+            $user->avatar = $cloudController->UploadFile($request->file('avatar'));
 
             $user->save();
             return response()->json([
