@@ -53,7 +53,16 @@ class AuthController extends Controller
         try{
             $cloudController = new UploadController();
             $user = User::find($request->user()->id);
-            $user->avatar = $cloudController->UploadFile($request->file('avatar'));
+           //if user avatar is not emthy and delete in storage
+           if($user->avatar != null){
+                $cloudController->delete($user->avatar);
+            }
+            // if(!empty($user['avatar_id'])){
+            //     //delete old avatar
+            //     $cloudController->delete($user['avatar']);
+            // }
+            $user->avatar = $clsoudController->UploadFile($request->file('avatar'));
+
             $user->save();
             return response()->json([
                 'message' => 'User successfully add avatar',
@@ -189,18 +198,23 @@ class AuthController extends Controller
    public function updateOwnUser(Request $request)
    {
     try{
+
+        $cloudController = new UploadController();
+        //can update own account
         $user = User::find(auth()->user()->id);
         $user->update($request->all());
-        //show avatar as link
-        if(!empty($user['avatar'])){
-            $cloudController = new UploadController();
-            $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
-        }
+        //if avatar is not emthy
+        
+        $user->save();
         return response()->json([
-            'message' => 'User successfully updated',
+            'message' => 'User successfully edited',
             'user' => $user
         ], 201);
+
         
+        //show avatar as link
+       
+       
     }
     catch(\Exception $e){
         return response()->json([
