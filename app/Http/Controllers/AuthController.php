@@ -53,13 +53,7 @@ class AuthController extends Controller
         try{
             $cloudController = new UploadController();
             $user = User::find($request->user()->id);
-           //if user avatar is not emthy and delete in storage
-           if($user->avatar != null){
-                $cloudController->delete($user->avatar);
-            }
-            
             $user->avatar = $cloudController->UploadFile($request->file('avatar'));
-
             $user->save();
             return response()->json([
                 'message' => 'User successfully add avatar',
