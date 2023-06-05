@@ -104,7 +104,8 @@ class LikeController extends Controller
             $like = like::where('user_id',$user->id)->where('artical_id',$id)->first();
             if($like != null){
                 return response()->json([
-                    'message' => 'you liked this post'
+                    'message' => 'you liked this post',
+                    'like' => $like->id,
                 ], 400);
             }
             return response()->json([
