@@ -35,7 +35,6 @@ class LikeController extends Controller
             $like->user_id = auth()->user()->id;
             $like->artical_id = $request->artical_id;
             $like->save();
-            //add user 1 point
             $user = User::find(auth()->user()->id);
             if($like->user_id != $user->id)
             {
@@ -93,6 +92,28 @@ class LikeController extends Controller
         catch(\Exception $e){
             return response()->json([
                 'message' => 'like deleted failed',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    public function findLike($id)
+    {
+        try{
+            $user = User::find(auth()->user()->id);
+            $like = like::where('user_id',$user->id)->where('artical_id',$id)->first();
+            if($like != null){
+                return response()->json([
+                    'message' => 'you liked this post'
+                ], 400);
+            }
+            return response()->json([
+                'message' => 'you are not like this post'
+            ], 200);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => 'find like failed',
                 'error' => $e->getMessage()
             ], 400);
         }

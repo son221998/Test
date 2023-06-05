@@ -274,6 +274,9 @@ public function userinfo()
 
 }
 
+
+
+
 public function redirectToProvider()
     {
         return Socialite::driver('google')->with(
@@ -287,4 +290,12 @@ public function redirectToProvider()
 
 
     }
+
+    // public fuction findlike (){
+    //     $user = User::where('name', 'like', '%'.$request->name.'%')->get();
+    //     return response()->json([
+    //         'message' => 'User successfully get info',
+    //         'user' => $user
+    //     ], 201);
+    // }
 }

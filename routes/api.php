@@ -58,7 +58,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user/info', [AuthController::class, 'userinfo']);
     Route::group(['middleware'=> ['user']], function(){
-        Route::put('/user/update', [AuthController::class, 'updateOwnUser']);
+             Route::put('/user/update', [AuthController::class, 'updateOwnUser']);
         Route::delete('/user/delete/', [AuthController::class, 'deleteOwnUser']);
         
         
@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
            Route::get('/like', [LikeController::class, 'index']);
            Route::post('/like/create/', [LikeController::class, 'create']);
            Route::delete('/like/delete/{id}', [LikeController::class, 'unlike']);
+           Route::get('/like/find/{id}', [LikeController::class, 'findLike']);
        
         });
 });
