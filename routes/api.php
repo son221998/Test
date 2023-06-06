@@ -1,41 +1,30 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoleController;
-use App\Http\Middleware\AdminPermision;
-use App\Http\Controllers\ArticalController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ReplyCommentController;
-use App\Http\Controllers\LikeController;
 use App\Models\ReplyComment;
+use Illuminate\Http\Request;
+use App\Http\Controllers\socialLogin;
+use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminPermision;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypeController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UploadController;
-use App\Http\Controllers\AppversionController;
+use App\Http\Controllers\ArticalController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AppversionController;
+use App\Http\Controllers\ReplyCommentController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 Route::group(['middleware' => ['auth:sanctum']], function(){
      /* Admin */
  Route::group(['middleware' => ['admin']], function () {
-    
+
     /* Delete user if you're admin */
     Route::delete('admin/user/delete/{id}', [AdminController::class, 'adminDeleteUser']);
 
@@ -53,7 +42,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
  Route::get('/auth/google', [AuthController::class, 'redirectToProvider'])->name('auth.google');
  //refrsh token route
  Route::get('/refresh', [AuthController::class, 'refresh']);
- 
+
  Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/add/avatar', [AuthController::class, 'addAvatar']) ;
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -61,15 +50,15 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::group(['middleware'=> ['user']], function(){
              Route::put('/user/update', [AuthController::class, 'updateOwnUser']);
         Route::delete('/user/delete/', [AuthController::class, 'deleteOwnUser']);
-        
-        
-       
+
+
+
         /* like */
            Route::get('/like', [LikeController::class, 'index']);
            Route::post('/like/create/', [LikeController::class, 'create']);
            Route::delete('/like/delete/{id}', [LikeController::class, 'unlike']);
            Route::get('/like/find/{id}', [LikeController::class, 'findLike']);
-       
+
         });
 });
 
@@ -79,7 +68,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/all/user', [AuthController::class, 'index']);
         Route::post('/role/create', [RoleController::class, 'create']);
         Route::get('/role', [RoleController::class,'index']);
-       
+
     });
    });
 
@@ -97,7 +86,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/app/version/create/', [AppversionController::class, 'create']);
     Route::put('/app/version/edit/{id}', [AppversionController::class, 'edit']);
     Route::Delete('/app/version/delete/{id}', [AppversionController::class, 'destroy']);
-   
+
 });
 });
 
@@ -106,7 +95,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 Route::get('/category', [CategoryController::class, 'index']);
 Route::get('/app/version', [AppversionController::class, 'index']);
 Route::group(['middleware' => ['auth:sanctum']],function(){
-    Route::group(['middleware' => ['postpermission']], function(){ 
+    Route::group(['middleware' => ['postpermission']], function(){
         Route::post('/category/create', [CategoryController::class, 'create']);
         Route::PATCH('/category/edit/{id}', [CategoryController::class, 'update']);
         Route::delete('/category/delete/{id}', [CategoryController::class, 'destroy']);
@@ -155,15 +144,26 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::post('/comment/create/', [CommentController::class, 'create']);
         Route::put('/comment/update/{id}', [CommentController::class, 'update']);
         Route::delete('/comment/delete/{id}', [CommentController::class, 'delete']);
-       
-    
+
+
         /* Reply Comment */
-    
+
         Route::post('/reply/create/{id}', [ReplyCommentController::class,'create']);
         Route::get('/reply',[ReplyCommentController::class,'index']);
         Route::put('/reply/update/{id}', [ReplyCommentController::class, 'update']);
-       
+
     });
+});
+
+
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $user = Socialite::driver('github')->user();
+
+    // $user->token
 });
 
 Route::get('/artical/test/{id}', [ArticalController::class, 'showArticalHasComment']);
@@ -171,5 +171,5 @@ Route::get('/artical/test/{id}', [ArticalController::class, 'showArticalHasComme
 
 
 
-    
-   
+
+
