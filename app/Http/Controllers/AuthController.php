@@ -137,9 +137,7 @@ class AuthController extends Controller
          
         foreach($user as $key => $value){
             $user[$key]['role_id'] = role::find($value['role_id'])->name;
-            if(!empty($user['avatar'])){
-                $user[$key]['avatar'] = $cloudController->getSignedUrl($value['avatar']);
-            }
+            $user[$key]['avatar'] = $cloudController->getSignedUrl($value['avatar']);
         
         }
         return response()->json([
