@@ -137,12 +137,17 @@ class AuthController extends Controller
          
         foreach($user as $key => $value){
             $user[$key]['role_id'] = role::find($value['role_id'])->name;
-            $user[$key]['avatar'] = $cloudController->getSignedUrl($value['avatar']);
+           
+            //show avatar as link 
+            if(!empty($value['avatar'])){
+                $user[$key]['avatar'] = $cloudController->getSignedUrl($value['avatar']);
+            }
         
         }
         return response()->json([
             'message' => 'User successfully get all',
             'user' => $user
+            
         ], 201);
       }
         catch(\Exception $e){
