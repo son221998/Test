@@ -18,6 +18,7 @@ class Artical extends Model
         'tag_id',
         'user_id',
         'type_id',
+        'feature_id',
         'origin',
     ];
 
@@ -47,6 +48,10 @@ class Artical extends Model
     public function type()
     {
         return $this->belongsTo(Type::class);
+    }
+    public function feature()
+    {
+        return $this->belongsTo(Feature::class);
     }
 
     

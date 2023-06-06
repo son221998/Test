@@ -16,6 +16,7 @@ use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\AppversionController;
+use App\Http\Controllers\FeatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +132,16 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::post('/type/create', [TypeController::class, 'create']);
         Route::put('/type/edit/{id}', [TypeController::class, 'update']);
         Route::delete('/type/delete/{id}', [TypeController::class, 'destroy']);
+        });
+});
+
+/* Feature */
+Route::get('/feature', [FeatureController::class, 'index']);
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::group(['middleware' => ['postpermission']], function(){
+        Route::post('/feature/create', [FeatureController::class, 'create']);
+        Route::put('/feature/edit/{id}', [FeatureController::class, 'update']);
+        Route::delete('/feature/delete/{id}', [FeatureController::class, 'destroy']);
         });
 });
 

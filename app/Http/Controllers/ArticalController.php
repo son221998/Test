@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UploadController;
+use App\Models\feature;
 use App\Models\Type;
 
 class ArticalController extends Controller
@@ -39,6 +40,15 @@ class ArticalController extends Controller
                 ], 404);
             }
 
+            $feature = feature::find($request->feature_id);
+            if(!$feature){
+                return response()->json([
+                    'message' => 'feature not found',
+                ], 404);
+            }
+
+            
+
             $artical = new Artical();
             $artical->title = $request->title;
             $artical->content = $request->content;
@@ -47,6 +57,7 @@ class ArticalController extends Controller
             $artical->tag_id = $request->tag_id;
             $artical->type_id = $request->type_id;
             $artical->origin = $request->origin;
+            $artical->feature_id = $feature->id;
             $artical->thumnail = $cloudController->UploadFile($request->file('thumnail'));
             $artical->save();
 
@@ -73,22 +84,17 @@ class ArticalController extends Controller
             $cloudController = new UploadController();
             
             $articals = Artical::all();
-            // foreach($articals as $artical){
-               
-            //     $artical['tag_id'] = $artical->tags->name;
-            //     if(!empty($artical['thumnail'])){
-            //         $artical['thumnail'] = $cloudController->getSignedUrl($artical['thumnail']);
-            //     }
-            // }
-            
             foreach($articals as $artical){
+                $feature = feature::find($artical->feature_id);
                 $tags = Tags::find($artical->tag_id);
                 $artical['category_id'] = $artical->category->title;
                 $artical['tag_id'] = $tags->title;
                 $artical['type_id'] = $artical->type->name;
+                $artical['feature_id'] = $feature->title;
                 if($artical['like'] == null){
                     $artical['like'] = 0;
                 }
+                
                //show tag 
                 if(!empty($artical['thumnail'])){
                     $artical['thumnail'] = $cloudController->getSignedUrl($artical['thumnail']);
@@ -129,6 +135,13 @@ class ArticalController extends Controller
             if(!$type){
                 return response()->json([
                     'message' => 'type not found',
+                ], 404);
+            }
+
+            $feature = feature::find($request->feature_id);
+            if(!$feature){
+                return response()->json([
+                    'message' => 'feature not found',
                 ], 404);
             }
             $artical = Artical::find($id);
