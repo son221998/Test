@@ -134,11 +134,12 @@ class AuthController extends Controller
       try{
         $cloudController = new UploadController();
          $user = User::all();
-         if(!empty($user['avatar'])){
-            $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
-        }
+         
         foreach($user as $key => $value){
             $user[$key]['role_id'] = role::find($value['role_id'])->name;
+            if(!empty($user['avatar'])){
+                $user[$key]['avatar'] = $cloudController->getSignedUrl($value['avatar']);
+            }
         
         }
         return response()->json([
