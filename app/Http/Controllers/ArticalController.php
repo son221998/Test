@@ -57,7 +57,7 @@ class ArticalController extends Controller
             $artical->tag_id = $request->tag_id;
             $artical->type_id = $request->type_id;
             $artical->origin = $request->origin;
-            $artical->feature_id = $feature->id;
+            $artical->feature_id = $request->feature_id;
             $artical->thumnail = $cloudController->UploadFile($request->file('thumnail'));
             $artical->save();
 
@@ -94,7 +94,7 @@ class ArticalController extends Controller
                 if($artical['like'] == null){
                     $artical['like'] = 0;
                 }
-                
+
                //show tag 
                 if(!empty($artical['thumnail'])){
                     $artical['thumnail'] = $cloudController->getSignedUrl($artical['thumnail']);
