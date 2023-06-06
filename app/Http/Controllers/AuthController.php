@@ -133,18 +133,14 @@ class AuthController extends Controller
     public function index (){
       try{
         $cloudController = new UploadController();
-        $user = User::all();
-       //loop user
-        foreach($user as $user){
-            $role = role::find($user['role_id']);
-            $user['role_id'] = $role['name'];
-            // $user['telegram'] = $cloudController->getSignedUrl($user['telegram']);
-           if(!empty($user['avatar'])){
+         $user = User::all();
+        foreach($user as $key => $value){
+            $user[$key]['role_id'] = role::find($value['role_id'])->name;
+          
+            if(!empty($user['avatar'])){
                 $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
            }
         }
-        //show role_id nas name in role
-
         return response()->json([
             'message' => 'User successfully get all',
             'user' => $user
