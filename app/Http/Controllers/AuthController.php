@@ -21,10 +21,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) 
+    public function register(Request $request)
     {
 
-        //create new user 
+        //create new user
         try{
             // $cloudController = new UploadController();
             $user = new User();
@@ -36,7 +36,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'User successfully registered',
                 'user' => $user
-                
+
             ], 201);
         }
         catch(\Exception $e){
@@ -45,9 +45,9 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], 400);
         }
-     
-     
-       
+
+
+
     }
     public function addAvatar(Request $request){
         try{
@@ -58,7 +58,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'User successfully add avatar',
                 'user' => $user
-                
+
             ], 201);
         }
         catch(\Exception $e){
@@ -69,7 +69,7 @@ class AuthController extends Controller
         }
     }
     public function login(Request $request){
-        	// validation 
+        	// validation
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
@@ -99,16 +99,16 @@ class AuthController extends Controller
                 'user' => $model,
                 'token' => $token,
             ]);
-        
-           
+
+
 
      }
-    
+
      public function refresh(Request $request){
         $request->user()->tokens()->delete();
         $token =$request->user()->createToken(config('app.name'))->plainTextToken;
         //if user has new token old token is expired
-       
+
         return response()->json([
             'status' => 200,
             'message' => 'Success',
@@ -119,32 +119,28 @@ class AuthController extends Controller
 
         public function logout(Request $request){
             $request->user()->tokens()->delete();
-            
+
             //delete token
             return response()->json([
                 'status' => 200,
                 'message' => 'Success',
             ]);
         }
-    
+
 
     //add id from role to user
-    
+
     public function index (){
       try{
         $cloudController = new UploadController();
-        $user = User::all();
-       //loop user 
-        foreach($user as $user){
-            $role = role::find($user['role_id']);
-            $user['role_id'] = $role['name'];
-            // $user['telegram'] = $cloudController->getSignedUrl($user['telegram']);
-           if(!empty($user['avatar'])){
+         $user = User::all();
+        foreach($user as $key => $value){
+            $user[$key]['role_id'] = role::find($value['role_id'])->name;
+          
+            if(!empty($user['avatar'])){
                 $user['avatar'] = $cloudController->getSignedUrl($user['avatar']);
            }
         }
-        //show role_id nas name in role
-        
         return response()->json([
             'message' => 'User successfully get all',
             'user' => $user
@@ -160,7 +156,7 @@ class AuthController extends Controller
 
     //delete function has middleware
 
-   
+
 
    public function deleteOwnUser(Request $request)
    {
@@ -176,7 +172,7 @@ class AuthController extends Controller
             'message' => 'User successfully deleted',
             'user' => $user
         ], 201);
-        
+
     }
     catch(\Exception $e){
         return response()->json([
@@ -195,17 +191,17 @@ class AuthController extends Controller
         $user = User::find(auth()->user()->id);
         $user->update($request->all());
         //if avatar is not emthy
-        
+
         $user->save();
         return response()->json([
             'message' => 'User successfully edited',
             'user' => $user
         ], 201);
 
-        
+
         //show avatar as link
-       
-       
+
+
     }
     catch(\Exception $e){
         return response()->json([
@@ -232,7 +228,7 @@ class AuthController extends Controller
                 'message' => 'Role not found',
             ], 404);
         }
-    
+
        }
        catch(\Exception $e){
         return response()->json([
@@ -241,18 +237,7 @@ class AuthController extends Controller
         ], 400);
        }
 }
-// public function logout() {
-    
-//     //RequestGuard
-//     $user = auth()->user();
-//     $user->tokens()->delete();
-//     return response()->json([
-//         'message' => 'User successfully logout',
-//         'user' => $user
-//     ], 201);
-    
 
-// }
 
 public function userinfo()
 {
@@ -269,14 +254,7 @@ public function userinfo()
         'user' => $user
     ], 201);
 
-    // return response()->json(auth()->user());
-
-
 }
-
-
-
-
 public function redirectToProvider()
     {
         return Socialite::driver('google')->with(
@@ -286,16 +264,9 @@ public function redirectToProvider()
                 'redirect_uri' => 'https://cinemagickh.com/api/auth/google/callback'
             ]
         )->redirect();
-        
+
 
 
     }
 
-    // public fuction findlike (){
-    //     $user = User::where('name', 'like', '%'.$request->name.'%')->get();
-    //     return response()->json([
-    //         'message' => 'User successfully get info',
-    //         'user' => $user
-    //     ], 201);
-    // }
 }
