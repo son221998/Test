@@ -70,14 +70,11 @@ class LikeController extends Controller
               $like->delete();
               //delete user 1 point
                 $user = User::find(auth()->user()->id);
-                if($like->user_id != $user->id)
-                {
-                    $user->point = $user->point - 1;
-                    $user->save();
-                    $artical = Artical::find($like->artical_id);
+                $user->point = $user->point - 1;
+                $user->save();
+                $artical = Artical::find($like->artical_id);
                 $artical->like = $artical->like - 1;
                 $artical->save();
-                }
                 
 
               return response()->json([
