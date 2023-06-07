@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\role;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
             ], 201);
         }
-        catch(\Exception $e){
+        catch(Exception $e){
             return response()->json([
                 'message' => 'User failed registered',
                 'error' => $e->getMessage()
@@ -61,7 +62,7 @@ class AuthController extends Controller
 
             ], 201);
         }
-        catch(\Exception $e){
+        catch(Exception $e){
             return response()->json([
                 'message' => 'User failed add avatar',
                 'error' => $e->getMessage()
@@ -134,23 +135,23 @@ class AuthController extends Controller
       try{
         $cloudController = new UploadController();
          $user = User::all();
-         
+
         foreach($user as $key => $value){
             $user[$key]['role_id'] = role::find($value['role_id'])->name;
-           
-            //show avatar as link 
+
+            //show avatar as link
             if(!empty($value['avatar'])){
                 $user[$key]['avatar'] = $cloudController->getSignedUrl($value['avatar']);
             }
-        
+
         }
         return response()->json([
             'message' => 'User successfully get all',
             'user' => $user
-            
+
         ], 201);
       }
-        catch(\Exception $e){
+        catch(Exception $e){
             return response()->json([
                 'message' => 'User failed get all',
                 'error' => $e->getMessage()
@@ -178,7 +179,7 @@ class AuthController extends Controller
         ], 201);
 
     }
-    catch(\Exception $e){
+    catch(Exception $e){
         return response()->json([
             'message' => 'User failed deleted',
             'error' => $e->getMessage()
@@ -207,7 +208,7 @@ class AuthController extends Controller
 
 
     }
-    catch(\Exception $e){
+    catch(Exception $e){
         return response()->json([
             'message' => 'User failed updated',
             'error' => $e->getMessage()
@@ -234,7 +235,7 @@ class AuthController extends Controller
         }
 
        }
-       catch(\Exception $e){
+       catch(Exception $e){
         return response()->json([
             'message' => 'User failed added role',
             'error' => $e->getMessage()

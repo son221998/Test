@@ -36,17 +36,11 @@ class LikeController extends Controller
             $like->artical_id = $request->artical_id;
             $like->save();
             $user = User::find(auth()->user()->id);
-            if($like->user_id != $user->id)
-            {
-                $user->point = $user->point + 1;
+            $user->point = $user->point + 1;
                 $user->save();
-            }
-            $artical = Artical::find($request->artical_id);
-            $artical->like = $artical->like + 1;
-            $artical->save();
-            
-            
-            $user->save();
+                $artical = Artical::find($request->artical_id);
+                $artical->like = $artical->like + 1;
+                $artical->save();
             return response()->json([
                 'message' => 'like created successfully',
                 'like' => $like
@@ -80,10 +74,11 @@ class LikeController extends Controller
                 {
                     $user->point = $user->point - 1;
                     $user->save();
-                }
-                $artical = Artical::find($like->artical_id);
+                    $artical = Artical::find($like->artical_id);
                 $artical->like = $artical->like - 1;
                 $artical->save();
+                }
+                
 
               return response()->json([
                   'message' => 'like deleted successfully',
