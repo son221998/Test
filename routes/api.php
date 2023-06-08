@@ -19,6 +19,8 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AppversionController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\CountryController;
 
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
@@ -167,6 +169,24 @@ Route::get('/auth/callback', function () {
 });
 
 Route::get('/artical/test/{id}', [ArticalController::class, 'showArticalHasComment']);
+
+
+
+/* artist */
+Route::get('/artist', [ArtistController::class, 'index']);
+Route::get('/artist/{id}', [ArtistController::class, 'show']);
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::group(['middleware' => ['postpermission']], function(){
+        Route::post('/artist/create', [ArtistController::class, 'create']);
+        Route::put('/artist/edit/{id}', [ArtistController::class, 'update']);
+        Route::delete('/artist/delete/{id}', [ArtistController::class, 'destroy']);
+        });
+});
+
+/* Country */
+Route::get('/country', [CountryController::class, 'index']);
+
+
 
 
 
