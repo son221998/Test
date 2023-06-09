@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('gender');
+            //also know as
+            $table->string('also_know_as')->nullable();
+            $table->string('place_of_birth');
+            $table->string('category_artist_id')->nullable();
             $table->date('dob');
             $table->date('dod')->nullable();
             $table->string('profile');

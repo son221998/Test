@@ -67,6 +67,9 @@ class ArtistController extends Controller
                 if($request->country_code == $c->code){
                     $artist->first_name = $request->first_name;
                     $artist->last_name = $request->last_name;
+                    $artist->also_know_as = $request->also_know_as;
+                    $artist->category_artist_id = $request->category_artist_id;
+                    $artist->place_of_birth = $request->place_of_birth;
                     $artist->gender = $request->gender;
                     $artist->dob = $request->dob;
                     $artist->dod = $request->dod;

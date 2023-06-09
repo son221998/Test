@@ -12,6 +12,9 @@ class Artist extends Model
     protected $fillable = [
         'first_name',
         'last_name',
+        'also_know_as',
+        'place_of_birth',
+        'category_artist_id',
         'gender',
         'dob',
         'dod',
