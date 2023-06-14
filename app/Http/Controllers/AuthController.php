@@ -31,6 +31,7 @@ class AuthController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->phone = $request->phone;
             // $user->telegram = $cloudController->UploadFile(($request->file('telegram')));
             $user->password = bcrypt($request->password);
             $user->save();
