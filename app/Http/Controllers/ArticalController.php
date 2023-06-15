@@ -9,6 +9,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UploadController;
 use App\Models\feature;
+use App\Models\Origin;
+use App\Models\SubCategory;
 use App\Models\Type;
 
 class ArticalController extends Controller
@@ -47,6 +49,20 @@ class ArticalController extends Controller
                 ], 404);
             }
 
+            $origin = Origin::find($request->author);
+            if(!$origin){
+                return response()->json([
+                    'message' => 'origin not found',
+                ], 404);
+            }
+
+            $subCategory = SubCategory::find($request->sub_cateogry_id);
+            if(!$subCategory){
+                return response()->json([
+                    'message' => 'sub category not found',
+                ], 404);
+            }
+
             
 
             $artical = new Artical();
@@ -54,6 +70,7 @@ class ArticalController extends Controller
             $artical->content = $request->content;
             $artical->author = $request->author;
             $artical->category_id = $request->category_id;
+            $artical->sub_cateogry_id = $request->sub_cateogry_id;
             $artical->tag_id = $request->tag_id;
             $artical->type_id = $request->type_id;
             $artical->origin = $request->origin;
@@ -87,10 +104,14 @@ class ArticalController extends Controller
             foreach($articals as $artical){
                 $feature = feature::find($artical->feature_id);
                 $tags = Tags::find($artical->tag_id);
+                $origin = Origin::find($artical->author);
+                $subCategory = SubCategory::find($artical->sub_cateogry_id);
                 $artical['category_id'] = $artical->category->title;
                 $artical['tag_id'] = $tags->title;
                 $artical['type_id'] = $artical->type->name;
+                $artical['sub_cateogry_id'] = $subCategory->title;
                 $artical['feature_id'] = $feature->title;
+                $artical['author'] = $origin->name;
                 if($artical['like'] == null){
                     $artical['like'] = 0;
                 }
@@ -138,12 +159,26 @@ class ArticalController extends Controller
                 ], 404);
             }
 
+            $subCategory = SubCategory::find($request->sub_cateogry_id);
+            if(!$subCategory){
+                return response()->json([
+                    'message' => 'sub category not found',
+                ], 404);
+            }
+
             $feature = feature::find($request->feature_id);
             if(!$feature){
                 return response()->json([
                     'message' => 'feature not found',
                 ], 404);
             }
+            $origin = Origin::find($request->author);
+            if(!$origin){
+                return response()->json([
+                    'message' => 'origin not found',
+                ], 404);
+            }
+
             $artical = Artical::find($id);
             $artical->update($request->all());
             if($request->hasFile('thumnail')){

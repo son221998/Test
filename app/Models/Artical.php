@@ -14,6 +14,7 @@ class Artical extends Model
         'content',
         'thumnail',
         'author',
+        'sub_cateogry_id',
         'category_id',
         'tag_id',
         'user_id',
@@ -52,6 +53,14 @@ class Artical extends Model
     public function feature()
     {
         return $this->belongsTo(Feature::class);
+    }
+    public function origin()
+    {
+        return $this->belongsTo(Origin::class);
+    }
+    public function subcaategory()
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
     
