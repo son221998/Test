@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artical;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\UploadController;
 
 class CategoryController extends Controller
@@ -139,6 +140,25 @@ class CategoryController extends Controller
                     'error' => $e->getMessage()
                 ], 400);
             }
+    }
+
+    public function showartical($id)
+    {
+        try{
+            $category = Category::find($id);
+            $articals = Artical::where('category_id', $id)->get();
+            return response()->json([
+                'message' => 'OK',
+                'artical' => $articals,
+                'subCategory' => $category
+            ], 200);
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => 'articals retrieved failed',
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 
 

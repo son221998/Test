@@ -93,6 +93,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 /* Category */
 Route::get('/category', [CategoryController::class, 'index']);
+Route::get('/category/showartical/{id}',[CategoryController::class,'showartical']);
 Route::get('/app/version', [AppversionController::class, 'index']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['postpermission']], function () {
