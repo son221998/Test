@@ -94,12 +94,10 @@ class SubCategoryController extends Controller
 
     public function showartical($id){
         try{
-              $subCategory = SubCategory::find($id);
             $artical = Artical::where('sub_cateogry_id', $id)->get();
             return response()->json([
                 'message' => 'OK',
                 'artical' => $artical,
-                'subCategory' => $subCategory
             ], 200);
 
               
