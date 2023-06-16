@@ -147,6 +147,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 /* Sub Category */
 Route::get('/sub-category', [SubCategoryController::class, 'index']);
+Route::get('/sub_category/showartical/{id}', [SubCategoryController::class, 'showartical']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['middleware' => ['postpermission']], function () {
         Route::post('/sub-category/create', [SubCategoryController::class, 'create']);

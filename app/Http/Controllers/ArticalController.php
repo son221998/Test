@@ -138,51 +138,12 @@ class ArticalController extends Controller
         //update artical all field can be null
         try{
             $cloudController = new UploadController();
-            $category = Category::find($request->category_id);
-            if(!$category){
-                return response()->json([
-                    'message' => 'category not found',
-                ], 404);
-            }
-
-            //check tags has or not
-            $tags = Tags::find($request->tag_id);
-            if(!$tags){
-                return response()->json([
-                    'message' => 'tags not found',
-                ], 404);
-            }
-            $type = Type::find($request->type_id);
-            if(!$type){
-                return response()->json([
-                    'message' => 'type not found',
-                ], 404);
-            }
-
-            $subCategory = SubCategory::find($request->sub_cateogry_id);
-            if(!$subCategory){
-                return response()->json([
-                    'message' => 'sub category not found',
-                ], 404);
-            }
-
-            $feature = feature::find($request->feature_id);
-            if(!$feature){
-                return response()->json([
-                    'message' => 'feature not found',
-                ], 404);
-            }
-            $origin = Origin::find($request->author);
-            if(!$origin){
-                return response()->json([
-                    'message' => 'origin not found',
-                ], 404);
-            }
-
+           
             $artical = Artical::find($id);
             $artical->update($request->all());
-            if($request->hasFile('thumnail')){
-                $cloudController->deleteFile($artical['thumnail']);
+            //if $request->thumnail is not emnty
+
+            if($request->file('thumnail')){
                 $artical->thumnail = $cloudController->UploadFile($request->file('thumnail'));
             }
             $artical->save();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artical;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
@@ -89,5 +90,27 @@ class SubCategoryController extends Controller
     public function destroy(SubCategory $subCategory)
     {
         //
+    }
+
+    public function showartical($id){
+        try{
+              $subCategory = SubCategory::find($id);
+            $artical = Artical::where('sub_cateogry_id', $id)->get();
+            return response()->json([
+                'message' => 'OK',
+                'artical' => $artical,
+                'subCategory' => $subCategory
+            ], 200);
+
+              
+
+        
+        }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => 'failed',
+                'error' => $e->getMessage()
+            ], 400);
+        }
     }
 }
