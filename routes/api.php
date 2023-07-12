@@ -23,6 +23,9 @@ use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\SubCategoryController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
